@@ -26,7 +26,6 @@
             font-family: 'Crimson Pro', serif;
         }
 
-        /* Chart Container Styling */
         .chart-container {
             position: relative;
             width: 100%;
@@ -49,10 +48,10 @@
             border-top-width: 4px;
         }
 
-        /* Transitions */
         .fade-enter {
             animation: fadeIn 0.4s ease-out;
         }
+
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(10px); }
             to { opacity: 1; transform: translateY(0); }
@@ -66,8 +65,8 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between h-20">
                 <div class="flex items-center">
-                    <!-- Official Meezan Bank Logo -->
-                    <img src="Meezan_Bank_Logo.png" alt="Meezan Bank Logo" class="h-12 w-auto">
+                    <!-- Updated Meezan Bank Logo -->
+                    <img src="./Meezan_Bank_Logo.png" alt="Meezan Bank Logo" class="h-12 w-auto">
                 </div>
                 <div class="hidden md:flex space-x-6 items-center">
                     <button onclick="navigate('overview')" id="nav-overview" class="nav-item active px-2 py-6 text-sm font-semibold text-gray-600 uppercase tracking-wider">Overview</button>
@@ -265,120 +264,96 @@
 
     </main>
 
+    <!-- FOOTER -->
     <footer class="bg-white border-t-2 border-[#8C1D2F] py-12">
         <div class="max-w-7xl mx-auto px-4 flex flex-col md:flex-row justify-between items-center gap-8">
             <div class="flex items-center gap-4">
-                <img src="Meezan_Bank_Logo.png" alt="Meezan Bank" class="h-10">
+                <img src="./Meezan_Bank_Logo.png" alt="Meezan Bank" class="h-10">
                 <div class="h-10 w-px bg-gray-300"></div>
-                <p class="text-xs text-gray-500 font-bold uppercase tracking-tighter leading-tight">Meezan Bank Ltd.<br>Corporate Analysis</p>
+                <div>
+                    <p class="text-sm text-gray-500">&copy; 2026 Meezan Bank Limited</p>
+                </div>
             </div>
-            
-            <div class="text-center md:text-right border-t md:border-t-0 md:border-l border-gray-200 pt-6 md:pt-0 md:pl-8">
-                <p class="text-[#8C1D2F] text-sm font-extrabold uppercase tracking-widest mb-1">Submitted By:</p>
-                <p class="text-gray-900 font-bold text-lg">BBA (Hons) Student</p>
-                <p class="text-gray-500 text-xs font-semibold uppercase mt-1">Subject: Financial Statement Analysis</p>
-                <p class="text-gray-400 text-[10px] uppercase mt-2 italic">Assignment for Session 2022-2026</p>
+            <div class="text-center md:text-right space-y-2">
+                <p class="text-[#8C1D2F] text-xs font-extrabold uppercase tracking-widest">Project Owner</p>
+                <p class="text-gray-900 font-bold text-sm">Mr. Ahsan Sandhu</p>
+
+                <p class="text-[#8C1D2F] text-xs font-extrabold uppercase tracking-widest mt-3">Coded By</p>
+                <p class="text-gray-700 font-semibold text-sm">ironictonystark26</p>
             </div>
         </div>
     </footer>
 
     <script>
-        const financialData = {
-            growth: {
-                labels: ['Total Assets', 'Investments', 'Deposits', 'Advances'],
-                values: [28.2, 34.3, 22.8, -24.5],
-                colors: ['#8C1D2F', '#C5A059', '#1A202C', '#E53E3E']
-            },
-            mix: {
-                labels: ['Investments', 'Advances', 'Cash', 'Other Assets'],
-                values: [64.4, 30.1, 8.8, 6.7],
-                colors: ['#8C1D2F', '#C5A059', '#333333', '#A0AEC0']
-            }
-        };
-
-        let growthChart = null;
-        let mixChart = null;
-
-        function navigate(id) {
-            document.querySelectorAll('section').forEach(s => s.classList.add('hidden'));
-            document.getElementById(`section-${id}`).classList.remove('hidden');
-            
-            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-            document.getElementById(`nav-${id}`).classList.add('active');
-            
-            if (id === 'financials') setTimeout(initCharts, 100);
-            window.scrollTo(0, 0);
-            document.getElementById('mobile-menu').classList.add('hidden');
-        }
-
+        // Mobile Menu Toggle
         function toggleMobileMenu() {
-            document.getElementById('mobile-menu').classList.toggle('hidden');
+            const menu = document.getElementById('mobile-menu');
+            menu.classList.toggle('hidden');
         }
 
-        function switchFinTab(id) {
-            document.querySelectorAll('.fin-tab').forEach(t => {
-                t.classList.remove('active', 'text-[#8C1D2F]', 'border-[#8C1D2F]');
-                t.classList.add('text-gray-400', 'border-transparent');
+        // Navigation Functionality
+        const sections = ['overview', 'structure', 'financials', 'strategy'];
+        function navigate(section) {
+            sections.forEach(sec => {
+                const el = document.getElementById(`section-${sec}`);
+                const btn = document.getElementById(`nav-${sec}`);
+                if (sec === section) {
+                    el.classList.remove('hidden');
+                    btn.classList.add('active');
+                } else {
+                    el.classList.add('hidden');
+                    btn.classList.remove('active');
+                }
             });
-            const activeTab = document.getElementById(`tab-${id}`);
-            activeTab.classList.add('active', 'text-[#8C1D2F]', 'border-[#8C1D2F]');
-            activeTab.classList.remove('text-gray-400', 'border-transparent');
-
-            document.querySelectorAll('.fin-content').forEach(c => c.classList.add('hidden'));
-            document.getElementById(`content-${id}`).classList.remove('hidden');
-            initCharts();
         }
 
-        function initCharts() {
-            const ctxG = document.getElementById('growthChart')?.getContext('2d');
-            const ctxM = document.getElementById('mixChart')?.getContext('2d');
+        // Financial Analysis Tabs
+        function switchFinTab(tab) {
+            const contentGrowth = document.getElementById('content-growth');
+            const contentMix = document.getElementById('content-mix');
+            const tabGrowth = document.getElementById('tab-growth');
+            const tabMix = document.getElementById('tab-mix');
 
-            if (growthChart) growthChart.destroy();
-            if (mixChart) mixChart.destroy();
-
-            if (ctxG) {
-                growthChart = new Chart(ctxG, {
-                    type: 'bar',
-                    data: {
-                        labels: financialData.growth.labels,
-                        datasets: [{
-                            data: financialData.growth.values,
-                            backgroundColor: financialData.growth.colors,
-                            borderRadius: 6
-                        }]
-                    },
-                    options: { 
-                        responsive: true, 
-                        maintainAspectRatio: false,
-                        plugins: { legend: { display: false } },
-                        scales: { y: { grid: { borderDash: [5, 5] } } }
-                    }
-                });
-            }
-
-            if (ctxM) {
-                mixChart = new Chart(ctxM, {
-                    type: 'doughnut',
-                    data: {
-                        labels: financialData.mix.labels,
-                        datasets: [{
-                            data: financialData.mix.values,
-                            backgroundColor: financialData.mix.colors,
-                            borderWidth: 6,
-                            borderColor: '#ffffff'
-                        }]
-                    },
-                    options: { 
-                        responsive: true, 
-                        maintainAspectRatio: false,
-                        cutout: '75%',
-                        plugins: { legend: { position: 'bottom', labels: { boxWidth: 12, padding: 20 } } }
-                    }
-                });
+            if(tab === 'growth') {
+                contentGrowth.classList.remove('hidden');
+                contentMix.classList.add('hidden');
+                tabGrowth.classList.add('active');
+                tabMix.classList.remove('active');
+            } else {
+                contentGrowth.classList.add('hidden');
+                contentMix.classList.remove('hidden');
+                tabGrowth.classList.remove('active');
+                tabMix.classList.add('active');
             }
         }
 
-        window.onload = () => navigate('overview');
+        // Charts
+        const ctxGrowth = document.getElementById('growthChart').getContext('2d');
+        const growthChart = new Chart(ctxGrowth, {
+            type: 'bar',
+            data: {
+                labels: ['Investments', 'Deposits', 'Advances', 'Equity', 'Liabilities'],
+                datasets: [{
+                    label: 'Growth %',
+                    data: [34.3, 22.8, -24.5, 15.0, 20.0],
+                    backgroundColor: '#8C1D2F'
+                }]
+            },
+            options: { responsive: true, plugins: { legend: { display: false } } }
+        });
+
+        const ctxMix = document.getElementById('mixChart').getContext('2d');
+        const mixChart = new Chart(ctxMix, {
+            type: 'doughnut',
+            data: {
+                labels: ['Investments', 'Deposits', 'Advances', 'Equity', 'Liabilities'],
+                datasets: [{
+                    data: [64.4, 91.1, 18.2, 12.0, 100],
+                    backgroundColor: ['#C5A059','#8C1D2F','#F4EFE6','#BFA07D','#D9C4A0']
+                }]
+            },
+            options: { responsive: true, plugins: { legend: { position: 'bottom' } } }
+        });
     </script>
 </body>
 </html>
